@@ -14,7 +14,7 @@ For details about how to create Custom Operations, check out [About Custom Opera
 
 Found a bug?
 ------------
-To report bugs in this repo, use the [project issue tracker here on GitHub](~/issues). To report a general ConDep issue (you don't know which component), use the [issue tracker for the old ConDep project](https://github.com/condep/ConDep/issues)
+To report bugs in this repo, use the [project issue tracker here on GitHub](https://github.com/condep/condep-dsl-operations-contrib/issues). To report a general ConDep issue (you don't know which component), use the [issue tracker for the old ConDep project](https://github.com/condep/ConDep/issues)
 
 License
 -------
