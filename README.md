@@ -5,7 +5,7 @@ This project contains all of ConDep's community contributed Operations. If you h
 How to contribute
 -----------------
 1. Fork this project
-2. Sign the [Contributor License Agreement](http://www.con-dep.net/contribute/)
+2. Sign the [Contributor License Agreement](http://www.condep.io/contribute/)
 3. Send us a pull request for your Operation.
 
 Need help?
