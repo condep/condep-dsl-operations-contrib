@@ -10,7 +10,7 @@ How to contribute
 
 Need help?
 ----------
-* [About Custom Operations](http://www.condep.io/docs/custom-operations/)
+* [About Custom Operations](http://www.condep.io/docs/3-0/custom-operations/)
 * [Documentation](http://www.condep.io/docs)
 * [Google Groups](https://groups.google.com/forum/#!forum/con-dep)
 * [Gitter](https://gitter.im/condep?utm_source=share-link&utm_medium=link&utm_campaign=share-link)
