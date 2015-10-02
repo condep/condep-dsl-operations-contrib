@@ -1,7 +1,6 @@
 condep-dsl-operations-contrib
 =============================
 
-[![Join the chat at https://gitter.im/condep/condep-dsl-operations-contrib](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/condep/condep-dsl-operations-contrib?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 This project contains all of ConDep's community contributed Operations. If you have created a custom operation for yourself or your company, and want to share it with the community, this is the place for that. If we find that one of these Operations are central to ConDep, we might decide to pull them into the core Operations project [condep-dsl-operations](https://github.com/condep-dsl-operations) and contribute you for it!
 
 How to contribute
@@ -14,6 +13,7 @@ Need help?
 ----------
 * [About Custom Operations](http://www.condep.io/docs/3-0/custom-operations/)
 * [Documentation](http://www.condep.io/docs)
+* Gitter Chat for this repository [![Join the chat at https://gitter.im/condep/condep-dsl-operations-contrib](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/condep/condep-dsl-operations-contrib?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 * [Google Groups](https://groups.google.com/forum/#!forum/con-dep)
 * [Gitter](https://gitter.im/condep?utm_source=share-link&utm_medium=link&utm_campaign=share-link)
 
