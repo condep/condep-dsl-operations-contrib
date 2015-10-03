@@ -1,5 +1,6 @@
 condep-dsl-operations-contrib
 =============================
+[![Build Status: Windows](https://ci.appveyor.com/api/projects/status/769f0cypiw1466bv/branch/master?svg=true)](https://ci.appveyor.com/project/condep/condep-dsl-operations-contrib/branch/master)
 
 This project contains all of ConDep's community contributed Operations. If you have created a custom operation for yourself or your company, and want to share it with the community, this is the place for that. If we find that one of these Operations are central to ConDep, we might decide to pull them into the core Operations project [condep-dsl-operations](https://github.com/condep-dsl-operations) and contribute you for it!
 
