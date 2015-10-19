@@ -1,3 +1,6 @@
 - title: Network
   docs:
   - remote/dns
+  - remote/domain
+  - remote/hostname
+  - remote/remove_host_from_ad

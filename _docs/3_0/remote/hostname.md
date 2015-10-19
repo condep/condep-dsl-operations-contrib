@@ -1,16 +1,16 @@
 ---
 layout: doc
-title: Dns
-permalink: /3-0/remote/dns/
+title: Hostname
+permalink: /3-0/remote/hostname/
 version_added: 3.2.0
 ---
 
-Configures DNS on servers.
+Set hostname.
 
 ## Syntax
 
 {% highlight csharp %}
-Dns(IEnumerable<string> dnsServersIpList)
+Hostname(string hostname)
 {% endhighlight %}
 
 <table>
@@ -22,8 +22,8 @@ Dns(IEnumerable<string> dnsServersIpList)
 	</thead>
 	<tbody>
     <tr>
-      <td>dnsServersIpList</td>
-      <td>List of ip's for DNS servers</td>
+      <td>hostname</td>
+      <td>Wanted hostname</td>
     </tr>
 	</tbody>
 </table>
@@ -35,7 +35,7 @@ public class Example : Artifact.Remote
 {
     public override void Configure(IOfferRemoteOperations server, ConDepSettings settings)
     {
-        server.Configure.Dns(new []{"10.65.89.20", "10.65.89.21"});
+        server.Configure.Hostname("HOSTNAME");
     }
 }
 {% endhighlight %}
