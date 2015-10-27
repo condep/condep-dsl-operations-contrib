@@ -3,4 +3,5 @@
   - remote/dns
   - remote/domain
   - remote/hostname
+  - remote/nodejs
   - remote/remove_host_from_ad
