@@ -75,6 +75,8 @@
     <Compile Include="Network\Hostname\HostnameExtensions.cs" />
     <Compile Include="Network\Hostname\SetHostnameOperation.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Software\NodeJs\InstallNodeJsOperation.cs" />
+    <Compile Include="Software\NodeJs\NodeJsExtensions.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config">
