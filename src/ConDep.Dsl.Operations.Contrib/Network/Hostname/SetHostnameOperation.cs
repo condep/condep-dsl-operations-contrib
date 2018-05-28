@@ -1,9 +1,10 @@
 ﻿using System;
-using ConDep.Dsl.Validation;
+using System.Threading;
+using ConDep.Dsl.Config;
 
 namespace ConDep.Dsl.Operations.Contrib.Network.Hostname
 {
-    public class SetHostnameOperation : RemoteCompositeOperation
+    public class SetHostnameOperation : RemoteOperation
     {
         private readonly string _hostname;
 
@@ -12,31 +13,25 @@ namespace ConDep.Dsl.Operations.Contrib.Network.Hostname
             _hostname = hostname;
         }
 
-        public override bool IsValid(Notification notification)
-        {
-            return true;
-        }
-
-        public override string Name
-        {
-            get { return "Setting Host Name"; }
-        }
-
-        public override void Configure(IOfferRemoteComposition server)
+        public override Result Execute(IOfferRemoteOperations remote, ServerConfig server, ConDepSettings settings, CancellationToken token)
         {
             //Assume restart is not necessary.
-            server.Configure.EnvironmentVariable("CONDEP_RESTART_NEEDED", "false", EnvironmentVariableTarget.Machine);
+            remote.Configure.EnvironmentVariable("CONDEP_RESTART_NEEDED", "false", EnvironmentVariableTarget.Machine);
 
             //Set hostname if not already set.
-            server.Execute.PowerShell(SetHostNameScript());
+            remote.Execute.PowerShell(SetHostNameScript());
 
             //Restart server and set env variable for restart NOT necessary, since the machine rebooted.
-            server
-                .OnlyIf(RestartNeeded())
-                    .Restart()
-                    .Configure.EnvironmentVariable("CONDEP_RESTART_NEEDED", "false", EnvironmentVariableTarget.Machine);
+            if (RemoteServerInfo.RestartRequired(remote))
+            {
+                remote.Restart();
+                remote.Configure.EnvironmentVariable("CONDEP_RESTART_NEEDED", "false", EnvironmentVariableTarget.Machine);
+            }
 
+            return new Result(true, false);
         }
+
+        public override string Name => "Setting Host Name";
 
         private string SetHostNameScript()
         {
@@ -53,20 +48,6 @@ else {{
     Write-Host ""Hostname is equal to the one given, doing nothing""
 }}
 ", _hostname);
-        }
-
-        private string RestartNeeded()
-        {
-            return @"
-$val = [Environment]::GetEnvironmentVariable(""CONDEP_RESTART_NEEDED"",""Machine"")
-
-if($val -eq 'true'){
-    return $true
-}
-else {
-    return $false
-}
-";
         }
     }
 }

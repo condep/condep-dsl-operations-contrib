@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using ConDep.Dsl.Builders;
 using ConDep.Dsl.Operations.Contrib.Network.Dns;
 
 namespace ConDep.Dsl
@@ -11,11 +12,10 @@ namespace ConDep.Dsl
         /// <param name="configuration"></param>
         /// <param name="dnsServersIpList">List of strings with the IPs to the DNS server(s)</param>
         /// <returns></returns>
-        public static IOfferRemoteConfiguration Dns(this IOfferRemoteConfiguration configuration, IEnumerable<string> dnsServersIpList)
+        public static void Dns(this IOfferRemoteConfiguration configuration, IEnumerable<string> dnsServersIpList)
         {
             var operation = new SetDnsOperation(dnsServersIpList);
-            Configure.Operation(configuration, operation);
-            return configuration;
+            OperationExecutor.Execute((RemoteBuilder)configuration, operation);
         }
     }
 }

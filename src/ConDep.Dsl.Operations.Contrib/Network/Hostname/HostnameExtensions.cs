@@ -1,4 +1,5 @@
-﻿using ConDep.Dsl.Operations.Contrib.Network.Hostname;
+﻿using ConDep.Dsl.Builders;
+using ConDep.Dsl.Operations.Contrib.Network.Hostname;
 
 namespace ConDep.Dsl
 {
@@ -12,11 +13,10 @@ namespace ConDep.Dsl
         /// <param name="configuration"></param>
         /// <param name="hostname">Wanted hostname for the server.</param>
         /// <returns></returns>
-        public static IOfferRemoteConfiguration Hostname(this IOfferRemoteConfiguration configuration, string hostname)
+        public static void Hostname(this IOfferRemoteConfiguration configuration, string hostname)
         {
             var operation = new SetHostnameOperation(hostname);
-            Configure.Operation(configuration, operation);
-            return configuration;
+            OperationExecutor.Execute((RemoteBuilder)configuration, operation);
         }
     }
 }

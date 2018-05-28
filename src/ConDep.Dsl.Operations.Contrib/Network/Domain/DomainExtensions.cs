@@ -1,4 +1,5 @@
-﻿using ConDep.Dsl.Operations.Contrib.Network.Domain;
+﻿using ConDep.Dsl.Builders;
+using ConDep.Dsl.Operations.Contrib.Network.Domain;
 
 namespace ConDep.Dsl
 {
@@ -14,11 +15,10 @@ namespace ConDep.Dsl
         /// <param name="domainController">The domaincontrollers FQDN.</param>
         /// <param name="adOuPath">Actice Directory OU path</param>
         /// <returns></returns>
-        public static IOfferRemoteConfiguration Domain(this IOfferRemoteConfiguration configuration, string domain, string domainUsername, string domainUserPassword, string domainController, string adOuPath)
+        public static void Domain(this IOfferRemoteConfiguration configuration, string domain, string domainUsername, string domainUserPassword, string domainController, string adOuPath)
         {
             var operation = new JoinDomainOperation(domain, domainUsername, domainUserPassword, domainController, adOuPath);
-            Configure.Operation(configuration, operation);
-            return configuration;
+            OperationExecutor.Execute((RemoteBuilder)configuration, operation);
         }
 
         /// <summary>
@@ -30,11 +30,10 @@ namespace ConDep.Dsl
         /// <param name="domainUsername">A domain user with rights  to remove hosts from Actice Directory.</param>
         /// <param name="domainUserPassword">The password for the domain user.</param>
         /// <returns></returns>
-        public static IOfferRemoteOperations RemoveHostFromActiveDirectory(this IOfferRemoteOperations remote, string hostname, string domainController, string domainUsername, string domainUserPassword)
+        public static void RemoveHostFromActiveDirectory(this IOfferRemoteOperations remote, string hostname, string domainController, string domainUsername, string domainUserPassword)
         {
             var operation = new RemoveHostFromActiveDirectoryOperation(hostname, domainController, domainUsername, domainUserPassword);
-            Configure.Operation(remote, operation);
-            return remote;
+            OperationExecutor.Execute((RemoteBuilder)remote, operation);
         }
     }
 }

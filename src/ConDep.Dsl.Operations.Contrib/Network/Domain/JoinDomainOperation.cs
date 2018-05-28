@@ -1,9 +1,10 @@
 ﻿using System;
-using ConDep.Dsl.Validation;
+using System.Threading;
+using ConDep.Dsl.Config;
 
 namespace ConDep.Dsl.Operations.Contrib.Network.Domain
 {
-    public class JoinDomainOperation : RemoteCompositeOperation
+    public class JoinDomainOperation : RemoteOperation
     {
         private readonly string _domain;
         private readonly string _domainUsername;
@@ -20,32 +21,27 @@ namespace ConDep.Dsl.Operations.Contrib.Network.Domain
             _adOuPath = adOuPath;
         }
 
-        public override bool IsValid(Notification notification)
-        {
-            return true;
-        }
-
-        public override string Name
-        {
-            get { return "Join Domain."; }
-        }
-
-        public override void Configure(IOfferRemoteComposition server)
+        public override Result Execute(IOfferRemoteOperations remote, ServerConfig server, ConDepSettings settings, CancellationToken token)
         {
             //Adding feature needed to join domain using PowerShell
-            server.Configure.Windows(win => win.InstallFeature("RSAT-AD-PowerShell"));
+            remote.Configure.Windows(win => win.InstallFeature("RSAT-AD-PowerShell"));
 
             //Assume restart is not necessary.
-            server.Configure.EnvironmentVariable("CONDEP_RESTART_NEEDED", "false", EnvironmentVariableTarget.Machine);
+            remote.Configure.EnvironmentVariable("CONDEP_RESTART_NEEDED", "false", EnvironmentVariableTarget.Machine);
 
-            server.Execute.PowerShell(JoindDomainScript());
+            remote.Execute.PowerShell(JoindDomainScript());
 
             //Restart server and set env variable for restart NOT necessary, since the machine rebooted.
-            server
-                .OnlyIf(RestartNeeded())
-                    .Restart()
-                    .Configure.EnvironmentVariable("CONDEP_RESTART_NEEDED", "false", EnvironmentVariableTarget.Machine);
+            if (RemoteServerInfo.RestartRequired(remote))
+            {
+                remote.Restart();
+                remote.Configure.EnvironmentVariable("CONDEP_RESTART_NEEDED", "false", EnvironmentVariableTarget.Machine);
+            }
+            remote.Execute.PowerShell("ipconfig /registerdns");
+            return new Result(true, false);
         }
+
+        public override string Name => "Join Domain.";
 
         private string JoindDomainScript()
         {
@@ -75,20 +71,6 @@ if($currentDomain -ine ""{0}"") {{
     }}
 }}
 ", _domain, _domainUsername, _domainUserPassword, _domainController, _adOuPath);
-        }
-
-        private string RestartNeeded()
-        {
-            return @"
-$val = [Environment]::GetEnvironmentVariable(""CONDEP_RESTART_NEEDED"",""Machine"")
-
-if($val -eq 'true'){
-    return $true
-}
-else {
-    return $false
-}
-";
         }
     }
 }

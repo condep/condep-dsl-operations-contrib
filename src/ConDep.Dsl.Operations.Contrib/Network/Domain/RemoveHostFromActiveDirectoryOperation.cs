@@ -2,11 +2,10 @@
 using System.Threading;
 using ConDep.Dsl.Config;
 using ConDep.Dsl.Remote;
-using ConDep.Dsl.Validation;
 
 namespace ConDep.Dsl.Operations.Contrib.Network.Domain
 {
-    public class RemoveHostFromActiveDirectoryOperation : ForEachServerOperation
+    public class RemoveHostFromActiveDirectoryOperation : RemoteOperation
     {
         private readonly string _domainController;
         private readonly string _domainUsername;
@@ -21,22 +20,15 @@ namespace ConDep.Dsl.Operations.Contrib.Network.Domain
             _domainUserPassword = domainUserPassword;
         }
 
-        public override void Execute(ServerConfig server, IReportStatus status, ConDepSettings settings, CancellationToken token)
+        public override Result Execute(IOfferRemoteOperations remote, ServerConfig server, ConDepSettings settings, CancellationToken token)
         {
-            var psExecutor = new PowerShellExecutor(server);
-            psExecutor.Execute("Add-WindowsFeature RSAT-AD-PowerShell");
-            psExecutor.Execute(RemoveHostFromActiveDirectoryScript());
+            var psExecutor = new PowerShellExecutor();
+            psExecutor.Execute(server, "Add-WindowsFeature RSAT-AD-PowerShell");
+            psExecutor.Execute(server, RemoveHostFromActiveDirectoryScript());
+            return new Result(true, false);
         }
 
-        public override bool IsValid(Notification notification)
-        {
-            return true;
-        }
-
-        public override string Name
-        {
-            get { return "Removing host from Active Directory"; }
-        }
+        public override string Name => "Removing host from Active Directory";
 
         private string RemoveHostFromActiveDirectoryScript()
         {

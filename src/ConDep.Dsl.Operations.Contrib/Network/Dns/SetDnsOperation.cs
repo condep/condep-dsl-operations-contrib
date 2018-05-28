@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using ConDep.Dsl.Validation;
+using System.Threading;
+using ConDep.Dsl.Config;
 
 namespace ConDep.Dsl.Operations.Contrib.Network.Dns
 {
-    public class SetDnsOperation : RemoteCompositeOperation
+    public class SetDnsOperation : RemoteOperation
     {
         private readonly IEnumerable<string> _dnsServersIpList;
 
@@ -13,21 +14,11 @@ namespace ConDep.Dsl.Operations.Contrib.Network.Dns
             _dnsServersIpList = dnsServersIpList;
         }
 
-        public override bool IsValid(Notification notification)
+        public override Result Execute(IOfferRemoteOperations remote, ServerConfig server, ConDepSettings settings, CancellationToken token)
         {
-            return true;
-        }
-
-        public override string Name
-        {
-            get { return "Setting DNS."; }
-        }
-
-        public override void Configure(IOfferRemoteComposition server)
-        {
-            var setDnsScript = String.Format(@"
+            var setDnsScript = $@"
 $nics = Get-WmiObject Win32_NetworkAdapterConfiguration -ErrorAction Inquire | Where{{$_.IPEnabled -eq ""TRUE""}}
-$newDNS = {0}
+$newDNS = {FormattedIpList()}
 
 foreach($nic in $nics)
 {{
@@ -50,10 +41,13 @@ foreach($nic in $nics)
         Write-Host ""`tDNS servers is equal to provided. Doing nothing.""
 	}}
 }}
-", FormattedIpList());
+";
 
-            server.Execute.PowerShell(setDnsScript);
+            remote.Execute.PowerShell(setDnsScript);
+            return Result.SuccessChanged();
         }
+
+        public override string Name => "Setting DNS.";
 
         private string FormattedIpList()
         {
